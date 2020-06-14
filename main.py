@@ -29,8 +29,7 @@ def add_header(response):
 @app.route('/', methods=['POST'])
 def handle_data():
     test = request.form['url']
-    plyr = request.form['player']
-    # checkImage(test, plyr)
+    # checkImage(test)
     screenshot = pyautogui.screenshot()
     width, height = screenshot.size
     new_size = 800, math.floor(height * (800 / width))
@@ -114,11 +113,12 @@ def getBlockFromColor(colorRGB):
 def checkImage(imgUrl, player):
     if imageColor(imgUrl):
         mc = Minecraft.create("13.57.251.20", 4711)
-        playerId = mc.getPlayerEntityId(player)
+        playerId = mc.getPlayerEntityId("SCPtopfirst1")
         time.sleep(5)
         img = Image.open(urllib.request.urlopen(imgUrl))
         width, height = img.size
         new_size = 75, math.floor(height * (75 / width))
+        print(mc.entity.getRotation(playerId))
         img = img.resize(new_size, Image.ANTIALIAS)
         pos = mc.entity.getPos(playerId)
         for r in range(new_size[0]):
@@ -127,11 +127,10 @@ def checkImage(imgUrl, player):
                 try:
                     pixelColor = img.getpixel(cord)
                     mc_block = getBlockFromColor(pixelColor)
-                    mc.setBlock(pos.x + r, pos.y+30 - c, pos.z + 50, mc_block[1], mc_block[3])
+                    mc.setBlock(pos.x-30+r, pos.y + 15 -c, pos.z + 40, mc_block[1], mc_block[3])
                 except:
                     continue
 
-        # mc.entity.setPos(playerId, (pos.x + 10, pos.y - 10, pos.z - 20))
         for i in range(15, 1, -1):
             time.sleep(1)
             print("Time left before screenshot: " + str(i))
@@ -152,4 +151,4 @@ def imageColor(imgUrl):
         return False
 
 
-app.run(host="127.0.0.1", port="80")
+app.run(host="192.168.1.183", port="80")
