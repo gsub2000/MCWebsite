@@ -35,6 +35,23 @@ def handle_data():
     new_size = 800, math.floor(height * (800 / width))
     screenshot = screenshot.resize(new_size, Image.ANTIALIAS)
     screenshot.save('static/test.png')
+
+    #get both images
+    img1 = screenshot.copy()
+    img2 = Image.open('static/origshirt.png')
+
+    #change size of t-shirt image
+    w,h = img2.size
+    new_size = 500, math.floor(h * (500 / w))
+    img2 = img2.resize(new_size, Image.ANTIALIAS)
+
+    s = 200, math.floor(height * (200 / width))
+    img1 = img1.resize(s, Image.ANTIALIAS)
+
+    #copy first img
+    img2.paste(img1, (150, 150))
+    img2.save('static/shirt.png', quality=95)
+
     return send_file('static/index2.html', cache_timeout=0)
 
 
@@ -151,4 +168,4 @@ def imageColor(imgUrl):
         return False
 
 
-app.run(host="192.168.1.183", port="80")
+app.run(host="127.0.0.1", port="80")
